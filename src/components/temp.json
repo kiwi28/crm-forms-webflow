@@ -1,0 +1,26 @@
+{
+  "procedure": {
+    "header": "Procedura",
+    "size": 10
+  },
+  "fName": {
+    "header": "Nume",
+    "size": 10
+  },
+  "phone": {
+    "header": "Telefon",
+    "size": 10
+  },
+  "email": {
+    "header": "Email",
+    "size": 10
+  },
+  "appointment": {
+    "header": "Data si ora programarii",
+    "size": 10
+  },
+  "details": {
+    "header": "Observatii",
+    "size": 10
+  }
+}
