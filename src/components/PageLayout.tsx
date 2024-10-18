@@ -11,7 +11,6 @@ export const PageLayout: React.FC<PageLayoutProps> = ({ children }) => {
 			w={"100vw"}
 			direction={"column"}
 			alignItems={"center"}
-			justifyContent={"center"}
 		>
 			{children}
 		</Flex>

@@ -3,7 +3,7 @@ export function formatDateForRomania(dateString: string): string {
 	const date = new Date(dateString);
 
 	// Create an options object for formatting
-	const options = {
+	const options: Intl.DateTimeFormatOptions = {
 		timeZone: "Europe/Bucharest",
 		day: "2-digit",
 		month: "2-digit",

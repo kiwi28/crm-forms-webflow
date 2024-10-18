@@ -73,6 +73,7 @@ export const LoginContainer: React.FC = () => {
 				justifyContent={"center"}
 				w={72}
 				gap={4}
+				mt={40}
 			>
 				<Heading mb={4}>Login</Heading>
 

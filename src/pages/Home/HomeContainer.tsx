@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import { pb } from "@/lib/pocketbase";
 import { useQuery } from "@tanstack/react-query";
 
@@ -9,10 +7,9 @@ import { HomeView } from "./HomeView";
 import { LoadingPage } from "@/components/LoadingPage";
 import { BigError } from "@/components/BigError";
 import { IBusinessData } from "@/lib/types/apiTypes";
-import { formatDateForRomania } from "@/lib/utils";
 
 export const HomeContainer = () => {
-	const [tableData, setTableData] = useState<IBusinessData[]>([]);
+	// const [tableData, setTableData] = useState<IBusinessData[]>([]);
 
 	// const [sortOptinos]
 
@@ -26,18 +23,7 @@ export const HomeContainer = () => {
 		enabled: !!tableName,
 	});
 
-	useEffect(() => {
-		if (dataQuery.data) {
-			setTableData([
-				...dataQuery.data.map((item) => {
-					const formattedDate = formatDateForRomania(item.appointment);
-					return { ...item, appointment: formattedDate };
-				}),
-			]);
-		}
-	}, [dataQuery.data]);
-
-	if (dataQuery.isFetching) {
+	if (dataQuery.isLoading) {
 		return <LoadingPage />;
 	}
 
@@ -45,11 +31,11 @@ export const HomeContainer = () => {
 		return <BigError message={dataQuery.error.message} />;
 	}
 
-	if (!dataQuery.data || tableData.length === 0) {
+	if (!dataQuery.data) {
 		return <BigError message="No data found" />;
 	}
 
-	return <HomeView data={tableData} />;
+	return <HomeView data={dataQuery.data} />;
 };
 
 // as Promise<IPbRespMulti<IBusinessData>>

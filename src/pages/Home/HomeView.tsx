@@ -1,16 +1,9 @@
-import React from "react";
-
-import { IBusinessData } from "@/lib/types/apiTypes";
+import { MainForm } from "@/components/MainForm";
+import { pb } from "@/lib/pocketbase";
 import { useMappingsCtx } from "@/lib/stores/MappingsCtx";
-import {
-	Table,
-	TableContainer,
-	Tbody,
-	Td,
-	Th,
-	Thead,
-	Tr,
-} from "@chakra-ui/react";
+import { IBusinessData } from "@/lib/types/apiTypes";
+import { Box, useToast } from "@chakra-ui/react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface HomeViewProps {
 	data: IBusinessData[];
@@ -18,41 +11,68 @@ interface HomeViewProps {
 
 export const HomeView: React.FC<HomeViewProps> = ({ data }) => {
 	const mappings = useMappingsCtx();
-	console.log("data", data);
+	const queryClient = useQueryClient();
+	const toast = useToast();
+	// console.log("data", data);
+
+	const deleteMutation = useMutation({
+		mutationFn: (rowID: string) =>
+			pb.collection(mappings.tableName).delete(rowID),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["tableData"] });
+			toast({
+				title: "Entry deleted successfully",
+				status: "success",
+				duration: 3000,
+				isClosable: true,
+			});
+		},
+		onError: (error) => {
+			console.error(error);
+			toast({
+				title: "Error deleteing entry",
+				status: "error",
+				duration: 3000,
+				isClosable: true,
+			});
+		},
+	});
+
+	const editMutation = useMutation({
+		mutationFn: ({
+			rowID,
+			data,
+		}: {
+			rowID: string;
+			data: Partial<IBusinessData>;
+		}) => pb.collection(mappings.tableName).update(rowID, data),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["tableData"] });
+			toast({
+				title: "Entry edited successfully",
+				status: "success",
+				duration: 3000,
+				isClosable: true,
+			});
+		},
+		onError: (error) => {
+			console.error(error);
+			toast({
+				title: "Error editing entry",
+				status: "error",
+				duration: 3000,
+				isClosable: true,
+			});
+		},
+	});
 
 	return (
-		<TableContainer>
-			<Table variant={"striped"}>
-				<Thead>
-					<Tr>
-						{Object.values(mappings.map).map((headerItem, idx) => (
-							<Th key={idx}>{headerItem.header}</Th>
-						))}
-					</Tr>
-				</Thead>
-				<Tbody>
-					{data.map((row) => (
-						<Tr key={row.id}>
-							{Object.keys(mappings.map).map((cellKey, idx) => (
-								<Td
-									key={idx}
-									maxW={
-										mappings.map[cellKey].size
-											? mappings.map[cellKey].size
-											: undefined
-									}
-									wordBreak={"break-word"}
-									// wordWrap={"break-word"}
-									whiteSpace={"normal"}
-									// maxW={10}
-								>
-									{row[cellKey as keyof typeof row]}
-								</Td>
-							))}
-						</Tr>
-					))}
-				</Tbody>
-			</Table>
-		</TableContainer>
+		<Box p={10}>
+			<MainForm
+				deleteMutation={deleteMutation}
+				editMutation={editMutation}
+				formData={data}
+			/>
+		</Box>
 	);
 };
