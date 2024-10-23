@@ -1,9 +1,11 @@
-import { MainForm } from "@/components/MainForm";
-import { pb } from "@/lib/pocketbase";
-import { useMappingsCtx } from "@/lib/stores/MappingsCtx";
-import { IBusinessData } from "@/lib/types/apiTypes";
-import { Box, useToast } from "@chakra-ui/react";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { pb } from "@/lib/pocketbase";
+import { IBusinessData } from "@/lib/types/apiTypes";
+import { useMappingsCtx } from "@/lib/stores/MappingsCtx";
+
+import { Box, useToast } from "@chakra-ui/react";
+
+import { MainForm } from "@/components/MainForm";
 
 interface HomeViewProps {
 	data: IBusinessData[];
@@ -31,6 +33,29 @@ export const HomeView: React.FC<HomeViewProps> = ({ data }) => {
 			console.error(error);
 			toast({
 				title: "Error deleteing entry",
+				status: "error",
+				duration: 3000,
+				isClosable: true,
+			});
+		},
+	});
+
+	const createRowMutation = useMutation({
+		mutationFn: (data: Partial<IBusinessData>) =>
+			pb.collection(mappings.tableName).create(data),
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["tableData"] });
+			toast({
+				title: "Rând creat cu succes",
+				status: "success",
+				duration: 3000,
+				isClosable: true,
+			});
+		},
+		onError: (error) => {
+			console.error(error);
+			toast({
+				title: "Eroare la crearea randului",
 				status: "error",
 				duration: 3000,
 				isClosable: true,
@@ -67,8 +92,12 @@ export const HomeView: React.FC<HomeViewProps> = ({ data }) => {
 	});
 
 	return (
-		<Box p={10}>
+		<Box
+			p={10}
+			w={"100%"}
+		>
 			<MainForm
+				createRowMutation={createRowMutation}
 				deleteMutation={deleteMutation}
 				editMutation={editMutation}
 				formData={data}

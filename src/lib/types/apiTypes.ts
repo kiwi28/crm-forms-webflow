@@ -14,6 +14,7 @@ export interface IMappingsResp {
 	created: string;
 	id: string;
 	tableName: string;
+	title: string;
 	updated: string;
 	userEmail: string;
 	map: Record<string, { header: string; size: number; dynamicWidth?: boolean }>;

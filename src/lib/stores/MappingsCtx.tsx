@@ -16,6 +16,7 @@ const initialValues: IMappingsResp = {
 	updated: "",
 	collectionId: "",
 	collectionName: "",
+	title: "",
 };
 
 const MappingsContext = createContext<IMappingsResp>(initialValues);

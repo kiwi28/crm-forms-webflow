@@ -1,12 +1,19 @@
 import { pb } from "@/lib/pocketbase";
 import { useMappingsCtx } from "@/lib/stores/MappingsCtx";
 import { ArrowBackIcon } from "@chakra-ui/icons";
-import { Box, Button, Flex, Image, SimpleGrid } from "@chakra-ui/react";
+import {
+	Box,
+	Button,
+	Flex,
+	Heading,
+	Image,
+	SimpleGrid,
+} from "@chakra-ui/react";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 
 export const NavBar: React.FC = () => {
-	const { tableName } = useMappingsCtx();
+	const { title } = useMappingsCtx();
 	const navigate = useNavigate();
 
 	const handleSignOut = useCallback(() => {
@@ -20,6 +27,8 @@ export const NavBar: React.FC = () => {
 			h={16}
 			position={"fixed"}
 			bg={"white"}
+			borderBottom={"1px solid"}
+			borderColor={"gray.200"}
 		>
 			<SimpleGrid
 				w={"100%"}
@@ -38,7 +47,12 @@ export const NavBar: React.FC = () => {
 					justifyContent={"center"}
 					alignItems={"center"}
 				>
-					{tableName}
+					<Heading
+						as={"h1"}
+						fontSize={"4xl"}
+					>
+						{title}
+					</Heading>
 				</Flex>
 				<Flex
 					alignItems={"center"}

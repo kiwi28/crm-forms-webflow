@@ -1,11 +1,17 @@
-import { useMappingsCtx } from "@/lib/stores/MappingsCtx";
-import { IBusinessData } from "@/lib/types/apiTypes";
-import { formatDateForRomania } from "@/lib/utils";
+import React, { useEffect } from "react";
+
+import { UseMutationResult } from "@tanstack/react-query";
+import { RecordModel } from "pocketbase";
+import { SubmitHandler, useForm } from "react-hook-form";
+
 import {
+	AddIcon,
 	Button,
+	Flex,
+	FormControl,
+	FormErrorMessage,
 	FormLabel,
 	HamburgerIcon,
-	HStack,
 	IconButton,
 	Input,
 	Menu,
@@ -19,7 +25,6 @@ import {
 	ModalFooter,
 	ModalHeader,
 	ModalOverlay,
-	Switch,
 	Table,
 	TableContainer,
 	Tbody,
@@ -30,10 +35,12 @@ import {
 	Tr,
 	useDisclosure,
 } from "@chakra-ui/icons";
-import { UseMutationResult } from "@tanstack/react-query";
-import { RecordModel } from "pocketbase";
-import React, { useCallback, useEffect, useState } from "react";
-import { SubmitHandler, useForm } from "react-hook-form";
+
+import { useMappingsCtx } from "@/lib/stores/MappingsCtx";
+import { IBusinessData } from "@/lib/types/apiTypes";
+import { formatDateForRomania } from "@/lib/utils";
+
+import { AddRowFormModal } from "../AddRowFormModal";
 
 type MainFormProps = {
 	formData: IBusinessData[];
@@ -47,38 +54,43 @@ type MainFormProps = {
 		},
 		unknown
 	>;
+	createRowMutation: UseMutationResult<
+		RecordModel,
+		Error,
+		Partial<IBusinessData>,
+		unknown
+	>;
 };
 
 export const MainForm: React.FC<MainFormProps> = ({
 	formData,
 	editMutation,
+	createRowMutation,
 	deleteMutation,
 }) => {
-	const [isTableExpanded, setIsTableExpanded] = useState(false);
-
+	const addRowDisclosure = useDisclosure();
 	const mappings = useMappingsCtx();
-
-	const handleTableExpand = useCallback(() => {
-		setIsTableExpanded(!isTableExpanded);
-	}, [setIsTableExpanded, isTableExpanded]);
 
 	return (
 		<>
-			<HStack mb={2}>
-				<FormLabel
-					m={0}
-					htmlFor="expand-table"
+			<Flex
+				mb={4}
+				justifyContent={"flex-end"}
+			>
+				<Button
+					size={"sm"}
+					leftIcon={<AddIcon />}
+					colorScheme={"blue"}
+					onClick={addRowDisclosure.onOpen}
 				>
-					Expand table
-				</FormLabel>
-				<Switch
-					disabled
-					id="expand-table"
-					isChecked={isTableExpanded}
-					onChange={handleTableExpand}
+					Adauga un rand nou
+				</Button>
+				<AddRowFormModal
+					createRowMutation={createRowMutation}
+					disclosure={addRowDisclosure}
 				/>
-			</HStack>
-			<TableContainer>
+			</Flex>
+			<TableContainer w={"100%"}>
 				<Table
 					variant={"striped"}
 					w={"100%"}
@@ -98,9 +110,6 @@ export const MainForm: React.FC<MainFormProps> = ({
 									key={idx}
 									p={1}
 									textAlign={"center"}
-									// display={
-									// 	headerItem.dynamicWidth ? "inline-block" : "table-cell"
-									// }
 								>
 									{headerItem.header}
 								</Th>
@@ -221,7 +230,7 @@ const DataRow: React.FC<{
 							? `${mappings?.map?.[cellKey]?.size}px`
 							: undefined
 					}
-					minW={10}
+					minW={mappings?.map?.[cellKey]?.dynamicWidth ? 80 : 10}
 					textAlign={"center"}
 					overflow={"hidden"}
 					whiteSpace={"normal"}
@@ -257,7 +266,7 @@ const ModalEdit: React.FC<ModalEditProps> = ({
 	const {
 		handleSubmit,
 		register,
-		formState: { errors },
+		formState: { errors, isDirty },
 	} = useForm<Partial<IBusinessData>>({
 		defaultValues: rowData,
 	});
@@ -266,11 +275,19 @@ const ModalEdit: React.FC<ModalEditProps> = ({
 		console.log("submit data", data);
 		editMutation.mutate({ rowID: rowData.id, data });
 	};
-	console.log("row errors", errors);
 
 	useEffect(() => {
-		onClose();
-	}, [editMutation.isSuccess]);
+		if (Object.entries(errors).length) {
+			console.error("error edit form", errors);
+		}
+	}, [errors]);
+
+	useEffect(() => {
+		if (editMutation.isSuccess) {
+			onClose();
+		}
+	}, [editMutation.isSuccess, onClose]);
+
 	return (
 		<Modal
 			size={"xl"}
@@ -284,14 +301,22 @@ const ModalEdit: React.FC<ModalEditProps> = ({
 					<ModalCloseButton />
 					<ModalBody>
 						{Object.keys(mappings.map).map((cellKey, idx) => (
-							<FormLabel key={idx}>
-								{mappings.map[cellKey].header}
-								{mappings.map[cellKey].dynamicWidth ? (
-									<Textarea {...register(cellKey)} />
-								) : (
-									<Input {...register(cellKey)} />
-								)}
-							</FormLabel>
+							<FormControl
+								key={idx}
+								isInvalid={!!errors?.[cellKey]}
+							>
+								<FormLabel>
+									{mappings.map[cellKey].header}
+									{mappings.map[cellKey].dynamicWidth ? (
+										<Textarea {...register(cellKey)} />
+									) : (
+										<Input {...register(cellKey)} />
+									)}
+								</FormLabel>
+								<FormErrorMessage>
+									{errors?.[cellKey]?.message?.toString()}
+								</FormErrorMessage>
+							</FormControl>
 						))}
 					</ModalBody>
 
@@ -308,6 +333,7 @@ const ModalEdit: React.FC<ModalEditProps> = ({
 							type={"submit"}
 							colorScheme="green"
 							isLoading={editMutation.isPending}
+							isDisabled={!isDirty}
 						>
 							Salveaza
 						</Button>

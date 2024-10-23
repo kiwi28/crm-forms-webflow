@@ -1,26 +1,221 @@
-{
-  "procedure": {
-    "header": "Procedura",
-    "size": 10
+e {
+  "baseCollectionEvent": {
+    "collection": {
+      "id": "1ppyea3pbb3rjmj",
+      "created": "2024-09-24 22:02:40.102Z",
+      "updated": "2024-10-20 03:44:43.157Z",
+      "name": "dentaMax",
+      "type": "base",
+      "system": false,
+      "schema": [
+        {
+          "system": false,
+          "id": "jiemqvsn",
+          "name": "procedure",
+          "type": "text",
+          "required": false,
+          "presentable": false,
+          "unique": false,
+          "options": {
+            "min": null,
+            "max": null,
+            "pattern": ""
+          }
+        },
+        {
+          "system": false,
+          "id": "kz11j5at",
+          "name": "fName",
+          "type": "text",
+          "required": false,
+          "presentable": false,
+          "unique": false,
+          "options": {
+            "min": null,
+            "max": null,
+            "pattern": ""
+          }
+        },
+        {
+          "system": false,
+          "id": "zpl8xrbw",
+          "name": "phone",
+          "type": "text",
+          "required": false,
+          "presentable": false,
+          "unique": false,
+          "options": {
+            "min": null,
+            "max": null,
+            "pattern": ""
+          }
+        },
+        {
+          "system": false,
+          "id": "60mipvi8",
+          "name": "email",
+          "type": "text",
+          "required": false,
+          "presentable": false,
+          "unique": false,
+          "options": {
+            "min": null,
+            "max": null,
+            "pattern": ""
+          }
+        },
+        {
+          "system": false,
+          "id": "ijq5bdqw",
+          "name": "appointment",
+          "type": "text",
+          "required": false,
+          "presentable": false,
+          "unique": false,
+          "options": {
+            "min": null,
+            "max": null,
+            "pattern": ""
+          }
+        },
+        {
+          "system": false,
+          "id": "7jyt9dn0",
+          "name": "details",
+          "type": "text",
+          "required": false,
+          "presentable": false,
+          "unique": false,
+          "options": {
+            "min": null,
+            "max": null,
+            "pattern": ""
+          }
+        }
+      ],
+      "indexes": [],
+      "listRule": "  @request.auth.id != \"\" \u0026\u0026 @request.auth.email = \"dentamax@gmail.com\"",
+      "viewRule": "  @request.auth.id != \"\" \u0026\u0026 @request.auth.email = \"dentamax@gmail.com\"",
+      "createRule": "  @request.auth.id != \"\" \u0026\u0026 @request.auth.email = \"dentamax@gmail.com\"",
+      "updateRule": "  @request.auth.id != \"\" \u0026\u0026 @request.auth.email = \"dentamax@gmail.com\"",
+      "deleteRule": "  @request.auth.id != \"\" \u0026\u0026 @request.auth.email = \"dentamax@gmail.com\"",
+      "options": {}
+    }
   },
-  "fName": {
-    "header": "Nume",
-    "size": 10
+  "collection": {
+    "id": "1ppyea3pbb3rjmj",
+    "created": "2024-09-24 22:02:40.102Z",
+    "updated": "2024-10-20 03:44:43.157Z",
+    "name": "dentaMax",
+    "type": "base",
+    "system": false,
+    "schema": [
+      {
+        "system": false,
+        "id": "jiemqvsn",
+        "name": "procedure",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "kz11j5at",
+        "name": "fName",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "zpl8xrbw",
+        "name": "phone",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "60mipvi8",
+        "name": "email",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "ijq5bdqw",
+        "name": "appointment",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      },
+      {
+        "system": false,
+        "id": "7jyt9dn0",
+        "name": "details",
+        "type": "text",
+        "required": false,
+        "presentable": false,
+        "unique": false,
+        "options": {
+          "min": null,
+          "max": null,
+          "pattern": ""
+        }
+      }
+    ],
+    "indexes": [],
+    "listRule": "  @request.auth.id != \"\" \u0026\u0026 @request.auth.email = \"dentamax@gmail.com\"",
+    "viewRule": "  @request.auth.id != \"\" \u0026\u0026 @request.auth.email = \"dentamax@gmail.com\"",
+    "createRule": "  @request.auth.id != \"\" \u0026\u0026 @request.auth.email = \"dentamax@gmail.com\"",
+    "updateRule": "  @request.auth.id != \"\" \u0026\u0026 @request.auth.email = \"dentamax@gmail.com\"",
+    "deleteRule": "  @request.auth.id != \"\" \u0026\u0026 @request.auth.email = \"dentamax@gmail.com\"",
+    "options": {}
   },
-  "phone": {
-    "header": "Telefon",
-    "size": 10
+  "httpContext": {},
+  "record": {
+    "appointment": "798090",
+    "collectionId": "1ppyea3pbb3rjmj",
+    "collectionName": "dentaMax",
+    "created": "2024-10-21 22:22:57.454Z",
+    "details": "bjiosdf dslabjf bjkfads jkadsfkj dfsjnkafds njafds l",
+    "email": "alexkiwi.2011@gmail.com",
+    "fName": "najdifnjio",
+    "id": "udu9j0xab7625qr",
+    "phone": "3590234590",
+    "procedure": "test email 1",
+    "updated": "2024-10-21 22:22:57.454Z"
   },
-  "email": {
-    "header": "Email",
-    "size": 10
-  },
-  "appointment": {
-    "header": "Data si ora programarii",
-    "size": 10
-  },
-  "details": {
-    "header": "Observatii",
-    "size": 10
-  }
+  "uploadedFiles": {}
 }
